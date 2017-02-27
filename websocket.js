@@ -1,4 +1,7 @@
 const WebSocket = require('ws');
+const express = require('express');
+const http = require('http');
+const path = require('path');
 
 class CodeGenerator{
   constructor(){
@@ -33,7 +36,9 @@ class CodeGenerator{
   }
 }
 
-const wss = new WebSocket.Server({ port: 9999 });
+let app = express();
+let server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
 const codeGenerator = new CodeGenerator();
 
 wss.on('connection', function(ws) {
@@ -47,3 +52,19 @@ wss.on('connection', function(ws) {
     }
   });
 });
+
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, 'websocket.html'));
+})
+
+app.get('/check/:code', function(req, res) {
+  let msg = '验证不通过';
+
+  if (codeGenerator.check(req.params.code)) {
+    res.send('验证成功');
+  }
+
+  res.send(msg);
+});
+
+server.listen(9999);

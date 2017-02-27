@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="http://s4.qhres.com/static/6026082b2fdaf405.js"></script>
+    <h1>websocket</h1>
+    <a href="###">
+        <div id="qrcode"></div>
+    </a>
+
+    <script>
+        const ws = new WebSocket('ws://localhost:9999');
+        const qrcode = document.getElementById("qrcode");
+
+        ws.addEventListener('open', function (event) {
+            ws.send('open');
+        });
+
+        ws.addEventListener('message', function (event) {
+            //console.log('Message from server', event.data);
+
+            let url = `http://localhost:9999/check/${event.data}`;
+            qrcode.innerHTML = '';
+            new QRCode(qrcode, url);
+            qrcode.parentNode.href = url;
+        });
+
+    </script>
+</body>
+
+</html>

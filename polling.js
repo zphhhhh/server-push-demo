@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const path = require('path');
 
 function generateCode(){
   let code = ('' + Math.random()).slice(-8);
@@ -15,8 +16,11 @@ setInterval(() => {
   setTimeout(() => previousCode = code, 2000);
 }, 10000);
 
+app.get('/' , function (req, res) {
+  res.sendFile(path.join(__dirname, './polling.html'));
+})
+
 app.get('/qrcode', function (req, res) {
-  res.setHeader('Access-Control-Allow-Origin', 'http://c.h5jun.com');
   res.send({code});
 });
 

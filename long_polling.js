@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 
 class CodeGenerator{
@@ -36,10 +37,11 @@ class CodeGenerator{
 
 let codeGenerator = new CodeGenerator();
 
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, './long_polling.html' ));
+})
+
 app.get('/qrcode/:previous', async function (req, res) {
-
-  res.setHeader('Access-Control-Allow-Origin', 'http://c.h5jun.com');
-
   let clientPrevious = req.params.previous;
   let code = codeGenerator.code;
 
